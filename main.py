@@ -22,7 +22,3 @@ def label(bmilabel):
 
 if __name__ == "__main__":
     Union.run(app)
-
-
-
-#pls
