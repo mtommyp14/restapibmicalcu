@@ -3,6 +3,6 @@ image: python:latest
 test:
   script:
     - pip install coverage
-    - coverage -m unittest coverageUnittest.py
+    - coverage run -m unittest coverageUnittest.py
 
 
