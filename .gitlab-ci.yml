@@ -4,5 +4,6 @@ test:
   script:
     - pip install coverage
     - coverage run -m unittest coverageUnittest.py
+    - coverage report 
 
 
