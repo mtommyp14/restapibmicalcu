@@ -1,3 +1,4 @@
+from imp import reload
 from typing import Union
 from fastapi import FastAPI
 
@@ -21,4 +22,4 @@ def label(bmilabel):
         return "Normal"
 
 if __name__ == "__main__":
-    Union.run(app)
+    Union.run('main:app', host='127.0.0.1', port=8000, log_level="info", reload=True)
