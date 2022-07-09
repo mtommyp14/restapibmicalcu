@@ -1,10 +1,12 @@
+build
 stages:
   - build
   - test
 
 build:
   stage: build
-  image: bmi:v1
+  image: mtommyp14/bmi:v1
+  
 
 test:
   script:
