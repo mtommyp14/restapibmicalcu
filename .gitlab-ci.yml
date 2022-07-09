@@ -1,9 +1,13 @@
-image: python:latest
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  image: bmi:v1
 
 test:
   script:
     - pip install coverage
     - coverage run -m unittest coverageUnittest.py
     - coverage report 
-
-
