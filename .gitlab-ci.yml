@@ -19,7 +19,7 @@ build_image:
   stage: build
   image: docker:latest
   services:
-   - docker:18.09.7-dind
+   - docker:dind
   variables:
   DOCKER_HOST: tcp://localhost:2375/
   script:
