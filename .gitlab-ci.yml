@@ -6,8 +6,7 @@ stages:
   - test
   - build
 
-
-run_test:
+run test:
   stages: test
   image: python:3.9-slim-builder
   before script:
@@ -20,7 +19,7 @@ run_test:
     - pytest --version
     - echo "Build Environment"
 
-build_image:
+build image:
   stages: build
   image: docker:20.10.16
   service:
