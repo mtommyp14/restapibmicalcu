@@ -17,9 +17,11 @@ run_test:
 
 build_image:
   stage: build
-  image: docker:dind
+  image: docker:latest
   services:
-   - docker:dind
+   - docker:18.09.7-dind
+  variables:
+  DOCKER_HOST: tcp://localhost:2375/
   script:
    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
    - docker build -t $CI_REGISTRY_IMAGE .
