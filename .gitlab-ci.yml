@@ -1,37 +1,57 @@
+variables:
+  IMAGE_NAME: mtommyp14/bmi:v1.0
+  IMAGE_TAG: python-app-1.0
+
 stages:
   - test
-  - test
-  - deploy
+  - build
 
-run test:
-  stage: pre
-  image: python:latest
+
+run_test:
+  stages: test
+  image: python:3.9-slim-builder
+  before script:
+    - apt update && apt install make 
   script:
+    - make test
     - python --version
     - pip --version
     - pip install pytest
     - pytest --version
     - echo "Build Environment"
 
-run test:
-  stage: test
-  image: $CI_REGISTRY_IMAGE
-  rules:
-   - if: $CI_REGISTRY_IMAGE == "schedule"
+build_image:
+  stages: build
+  image: docker:20.10.16
+  service:
+    - docker:20.10.16
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  before script:
+    - docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD 
   script:
-    - pip install coverage
-    - coverage run -m unittest coverageUnittest.py
-    - coverage report
+    - docker build -t $IMAGE_NAME:IMAGE_TAG .
+    - docker push $IMAGE_NAME:IMAGE_TAG
 
-build image:
-  stage: build
-  image: docker
-  services:
-   - docker:dind
-  rules:
-   - if: $CI_REGISTRY_IMAGE == "schedule"
-  script:
-   - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGITRY --password-stdin
-   - docker build -t $CI_REGISTRY_IMAGE .
-   - docker push $CI_REGISTRY_IMAGE
+# run test:
+#   stage: test
+#   image: $CI_REGISTRY_IMAGE
+#   rules:
+#    - if: $CI_REGISTRY_IMAGE == "schedule"
+#   script:
+#     - pip install coverage
+#     - coverage run -m unittest coverageUnittest.py
+#     - coverage report
+
+# build image:
+#   stage: build
+#   image: docker
+#   services:
+#    - docker:dind
+#   rules:
+#    - if: $CI_REGISTRY_IMAGE == "schedule"
+#   script:
+#    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGITRY --password-stdin
+#    - docker build -t $CI_REGISTRY_IMAGE .
+#    - docker push $CI_REGISTRY_IMAGE
 
