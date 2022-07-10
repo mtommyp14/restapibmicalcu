@@ -31,24 +31,19 @@ stages:
 #   script:
 #     - docker build -t $IMAGE_NAME:IMAGE_TAG .
 #     - docker push $IMAGE_NAME:IMAGE_TAG
-
-run test:
+run_test:
   stage: test
   image: $CI_REGISTRY_IMAGE
-  rules:
-   - if: $CI_REGISTRY_IMAGE == "schedule"
   script:
     - pip install coverage
     - coverage run -m unittest coverageUnittest.py
     - coverage report
 
-build image:
+build_image:
   stage: build
   image: docker
   services:
    - docker:dind
-  rules:
-   - if: $CI_REGISTRY_IMAGE == "schedule"
   script:
    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGITRY --password-stdin
    - docker build -t $CI_REGISTRY_IMAGE .
