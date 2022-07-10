@@ -1,11 +1,10 @@
 stages:
-  - build
+  - pre
   - test
   - deploy
 
-
-build:
-  stage: build
+pre job:
+  stage: pre
   image: python:latest
   script:
     - python --version
@@ -14,7 +13,7 @@ build:
     - pytest --version
     - echo "Build Environment"
 
-test:
+run test:
   stage: test
   image: $CI_REGISTRY_IMAGE
   rules:
@@ -24,7 +23,7 @@ test:
     - coverage run -m unittest coverageUnittest.py
     - coverage report
 
-deploy:
+build image:
   stage: build
   image: docker
   services:
