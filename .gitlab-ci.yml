@@ -1,9 +1,9 @@
 stages:
-  - pre
+  - test
   - test
   - deploy
 
-pre job:
+run test:
   stage: pre
   image: python:latest
   script:
