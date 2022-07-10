@@ -1,5 +1,5 @@
 build:
-  stage: env
+  stage: build
   image: python:latest
   script:
     - python --version
@@ -8,6 +8,7 @@ build:
     - pytest --version
     - echo "Build Environment"
 test:
+  stage: test
   image: $CI_REGISTRY_IMAGE
   rules:
    - if: $CI_REGISTRY_IMAGE == "schedule"
