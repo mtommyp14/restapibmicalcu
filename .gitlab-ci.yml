@@ -17,7 +17,7 @@ run_test:
 
 build_image:
   stage: build
-  image: docker:stable
+  image: docker:dind
   services:
    - docker:dind
   script:
