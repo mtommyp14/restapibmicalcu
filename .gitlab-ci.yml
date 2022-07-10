@@ -1,3 +1,9 @@
+stages:
+  - build
+  - test
+  - deploy
+
+
 build:
   stage: build
   image: python:latest
@@ -7,6 +13,7 @@ build:
     - pip install pytest
     - pytest --version
     - echo "Build Environment"
+
 test:
   stage: test
   image: $CI_REGISTRY_IMAGE
