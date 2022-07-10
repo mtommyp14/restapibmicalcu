@@ -1,37 +1,19 @@
-variables:
-  IMAGE_NAME: mtommyp14/bmi:v1.0
-  IMAGE_TAG: python-app-1.0
-
 stages:
+  - pre
   - test
-  - build
+  - deploy
 
-# run test:
-#   stages: test
-#   image: python:3.9-slim-builder
-#   before script:
-#     - apt update && apt install make 
-#   script:
-#     - make test
-#     - python --version
-#     - pip --version
-#     - pip install pytest
-#     - pytest --version
-#     - echo "Build Environment"
+run pre:
+  stage: pre
+  image: python:latest
+  script:
+    - python --version
+    - pip --version
+    - pip install pytest
+    - pytest --version
+    - echo "Build Environment"
 
-# build image:
-#   stages: build
-#   image: docker:20.10.16
-#   service:
-#     - docker:20.10.16
-#   variables:
-#     DOCKER_TLS_CERTDIR: "/certs"
-#   before script:
-#     - docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD 
-#   script:
-#     - docker build -t $IMAGE_NAME:IMAGE_TAG .
-#     - docker push $IMAGE_NAME:IMAGE_TAG
-run_test:
+run test:
   stage: test
   image: $CI_REGISTRY_IMAGE
   script:
@@ -39,7 +21,7 @@ run_test:
     - coverage run -m unittest coverageUnittest.py
     - coverage report
 
-build_image:
+build image:
   stage: build
   image: docker
   services:
