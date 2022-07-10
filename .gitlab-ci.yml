@@ -6,51 +6,51 @@ stages:
   - test
   - build
 
-run test:
-  stages: test
-  image: python:3.9-slim-builder
-  before script:
-    - apt update && apt install make 
-  script:
-    - make test
-    - python --version
-    - pip --version
-    - pip install pytest
-    - pytest --version
-    - echo "Build Environment"
-
-build image:
-  stages: build
-  image: docker:20.10.16
-  service:
-    - docker:20.10.16
-  variables:
-    DOCKER_TLS_CERTDIR: "/certs"
-  before script:
-    - docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD 
-  script:
-    - docker build -t $IMAGE_NAME:IMAGE_TAG .
-    - docker push $IMAGE_NAME:IMAGE_TAG
-
 # run test:
-#   stage: test
-#   image: $CI_REGISTRY_IMAGE
-#   rules:
-#    - if: $CI_REGISTRY_IMAGE == "schedule"
+#   stages: test
+#   image: python:3.9-slim-builder
+#   before script:
+#     - apt update && apt install make 
 #   script:
-#     - pip install coverage
-#     - coverage run -m unittest coverageUnittest.py
-#     - coverage report
+#     - make test
+#     - python --version
+#     - pip --version
+#     - pip install pytest
+#     - pytest --version
+#     - echo "Build Environment"
 
 # build image:
-#   stage: build
-#   image: docker
-#   services:
-#    - docker:dind
-#   rules:
-#    - if: $CI_REGISTRY_IMAGE == "schedule"
+#   stages: build
+#   image: docker:20.10.16
+#   service:
+#     - docker:20.10.16
+#   variables:
+#     DOCKER_TLS_CERTDIR: "/certs"
+#   before script:
+#     - docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD 
 #   script:
-#    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGITRY --password-stdin
-#    - docker build -t $CI_REGISTRY_IMAGE .
-#    - docker push $CI_REGISTRY_IMAGE
+#     - docker build -t $IMAGE_NAME:IMAGE_TAG .
+#     - docker push $IMAGE_NAME:IMAGE_TAG
+
+run test:
+  stage: test
+  image: $CI_REGISTRY_IMAGE
+  rules:
+   - if: $CI_REGISTRY_IMAGE == "schedule"
+  script:
+    - pip install coverage
+    - coverage run -m unittest coverageUnittest.py
+    - coverage report
+
+build image:
+  stage: build
+  image: docker
+  services:
+   - docker:dind
+  rules:
+   - if: $CI_REGISTRY_IMAGE == "schedule"
+  script:
+   - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGITRY --password-stdin
+   - docker build -t $CI_REGISTRY_IMAGE .
+   - docker push $CI_REGISTRY_IMAGE
 
