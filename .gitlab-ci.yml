@@ -1,4 +1,4 @@
-env:
+build:
   stage: env
   image: python:latest
   script:
@@ -16,7 +16,7 @@ test:
     - coverage run -m unittest coverageUnittest.py
     - coverage report
 
-build:
+deploy:
   stage: build
   image: docker
   services:
