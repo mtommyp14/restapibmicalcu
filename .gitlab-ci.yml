@@ -1,4 +1,4 @@
-run_pre:
+build_env:
   image: python:latest
   script:
     - python --version
@@ -17,7 +17,7 @@ run_test:
 
 build_image:
   stage: build
-  image: docker
+  image: docker:stable
   services:
    - docker:dind
   script:
