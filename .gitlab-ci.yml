@@ -1,15 +1,30 @@
-build
-stages:
-  - build
-  - test
-
-build:
-  stage: build
-  image: mtommyp14/bmi:v1
-  
-
+env:
+  stage: env
+  image: python:latest
+  script:
+    - python --version
+    - pip --version
+    - pip install pytest
+    - pytest --version
+    - echo "Build Environment"
 test:
+  image: $CI_REGISTRY_IMAGE
+  rules:
+   - if: $CI_REGISTRY_IMAGE == "schedule"
   script:
     - pip install coverage
     - coverage run -m unittest coverageUnittest.py
-    - coverage report 
+    - coverage report
+
+build:
+  stage: build
+  image: docker
+  services:
+   - docker:dind
+  rules:
+   - if: $CI_REGISTRY_IMAGE == "schedule"
+  script:
+   - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGITRY --password-stdin
+   - docker build -t $CI_REGISTRY_IMAGE .
+   - docker push $CI_REGISTRY_IMAGE
+
