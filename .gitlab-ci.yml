@@ -17,11 +17,13 @@ run_test:
 
 build_image:
   stage: build
-  image: docker:latest
-  services:
-   - docker:dind
+  image: docker:20.10.16
   variables:
-  DOCKER_HOST: tcp://localhost:2375/
+    DOCKER_TLS_CERTDIR: "/certs"
+  services:
+  - docker:20.10.16-dind
+  before_script:
+  - docker info
   script:
    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
    - docker build -t $CI_REGISTRY_IMAGE .
