@@ -45,13 +45,42 @@ jobs:
         run: python -m venv venv && source venv/bin/activate && pip3 install -r requirements.txt
         if: steps.cache-venv.outputs.cache-hit != 'true'
 
-      - name: Run Tests   
-        # Note that you have to activate the virtualenv in every step
-        # because GitHub actions doesn't preserve the environment   
-        run: |
-           pip install coverage
-           coverage run -m unittest coverageUnittest.py
-           coverage report
+      - name: Python Coverage Comment
+        # You may pin to the exact commit or the version.
+        # uses: ewjoachim/python-coverage-comment-action@c16f8c68076bdfaf343ab1cf1bca96dee5c2d369
+        uses: ewjoachim/python-coverage-comment-action@v2.1.0
+        with:
+          # A GitHub token to write comments and write the badge to the wiki. Set to `$ {{ github.token }}` (without the space between `$` and `{`).
+
+          GITHUB_TOKEN: 
+          # Only useful on the "workflow_run" part of the workflow. Set to `$ {{ github.event.workflow_run.id }}`  (without the space between `$` and `{`).
+
+          GITHUB_PR_RUN_ID: # optional
+          # [Advanced] Specify a different template for the comments that will be written on the PR. See the Action README documentation for how to use this properly.
+
+          COMMENT_TEMPLATE: # optional
+          # Name of the json file containing badge informations stored in the repo wiki.
+
+          BADGE_FILENAME: # optional, default is python-coverage-comment-action-badge.json
+          # Name of the artifact in which the body of the comment to post on the PR is stored.
+
+          COMMENT_ARTIFACT_NAME: # optional, default is python-coverage-comment-action
+          # Name of the file in which the body of the comment to post on the PR is stored.
+
+          COMMENT_FILENAME: # optional, default is python-coverage-comment-action.txt
+          # If the coverage percentage is above or equal to this value, the badge will be green.
+
+          MINIMUM_GREEN: # optional, default is 100
+          # If the coverage percentage is not green and above or equal to this value, the badge will be orange. Otherwise it will be red.
+
+          MINIMUM_ORANGE: # optional, default is 70
+          # If true, will run `coverage combine` before reading the `.coverage` file.
+
+          MERGE_COVERAGE_FILES: # optional
+          # If true, produces more output. Useful for debugging.
+
+          VERBOSE: # optional
+    
       - name: Create archive of dependencies
         run: |
           cd ./venv/lib/python3.7/site-packages
