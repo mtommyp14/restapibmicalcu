@@ -1,5 +1,5 @@
 import unittest 
-from main import bmi, label, height, weight
+from main import bmi, label
 
 class valid(unittest.TestCase):
     def test_item(self):
