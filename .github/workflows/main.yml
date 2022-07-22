@@ -39,10 +39,11 @@ jobs:
           key: python
           coverage-file: coverageUnittest.py
           dsn: ${{ secrets.DEEPSOURCE_DSN }}
+      #  run: pip3 install virtualenv
           
       - name: Create archive of dependencies
         run: |
-          cd ./venv/lib/python3.7/site-packages
+          cd ./venv/lib/python3.9/site-packages
           zip -r9 ../../../../api.zip .
       - name: Add API files to Zip file
         run: cd ./api && zip -g ../api.zip -r .
